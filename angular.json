@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Szakdolgozat": {
+    "szakdolgozat": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Szakdolgozat:build:production"
+              "buildTarget": "szakdolgozat:build:production"
             },
             "development": {
-              "buildTarget": "Szakdolgozat:build:development"
+              "buildTarget": "szakdolgozat:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -98,5 +98,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
