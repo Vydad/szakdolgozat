@@ -1,7 +1,7 @@
 {
   "hosting": {
     "target": "szakdolgozat",
-    "public": "dist/szakdolgozatc",
+    "public": "dist/szakdolgozat",
     "ignore": [
       "firebase.json",
       "**/.*",
