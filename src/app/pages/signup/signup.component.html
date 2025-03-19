@@ -1,0 +1,17 @@
+<app-navbar></app-navbar>
+<div class="signup-container">
+    <h2>Regisztráció</h2>
+    <div *ngIf="Message" class="message">
+      {{ Message }}
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    <form (submit)="onRegister()" #signupForm="ngForm">
+      <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required>
+      <input type="password" [(ngModel)]="password" name="password" placeholder="Jelszó" required>
+      <input type="password" [(ngModel)]="password2" name="password" placeholder="Jelszó megerősítése" required>
+      <button type="submit" [disabled]="signupForm.invalid" id="signup">Regisztráció</button>
+    </form>
+    <button (click)="goLogin()" id="login">Vissza a Bejelentkezéshez</button>
+</div>
