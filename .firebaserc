@@ -3,6 +3,14 @@
     "default": "szakdolgozat-8a45b",
     "szakdolgozat": "szakdolgozat-8a45b"
   },
-  "targets": {},
+  "targets": {
+    "szakdolgozat-8a45b": {
+      "hosting": {
+        "szakdolgozat": [
+          "szakdolgozat-8a45b"
+        ]
+      }
+    }
+  },
   "etags": {}
 }
