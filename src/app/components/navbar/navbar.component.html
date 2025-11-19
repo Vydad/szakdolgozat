@@ -2,7 +2,7 @@
     <div>
         <a routerLink="/home" routerLinkActive="active">Főoldal</a>
         <a routerLink="/characters" routerLinkActive="active" *ngIf="authService.isAuthenticated()">Karakterek</a>
-        <a routerLink="/campaigns" routerLinkActive="active" *ngIf="authService.isAuthenticated()">Kapmányok</a>
+        <a routerLink="/campaigns" routerLinkActive="active" *ngIf="authService.isAuthenticated()">Kampányok</a>
     </div>
     <div id="log">
         <button *ngIf="!authService.isAuthenticated()" routerLink="/login" routerLinkActive="active" >Bejelentkezés</button>
