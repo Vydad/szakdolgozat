@@ -281,13 +281,13 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.range+"m"}}</td>
                     <td>
-                      <button (click)="roll(attackRoll(item.mod,item.type))">
+                      <button class="skill-value-btn" id="weapon_hit"(click)="roll(attackRoll(item.mod,item.type))">
                         {{attackRoll(item.mod,item.type)>0? '+' + attackRoll(item.mod,item.type):attackRoll(item.mod,item.type)}}
                       </button>
                     </td>
                     <td>
                       <ng-container *ngIf="item.dmg">
-                        <button 
+                        <button class="skill-value-btn" id="weapon_dmg"
                           *ngFor="let dmgPart of item.dmg.split(',')" 
                           (click)="rollDamage(item.mod,dmgPart.trim())">
                           {{ dmgPart.trim()+dmgMod(item.mod)}}
@@ -527,7 +527,13 @@
                 <tr *ngFor="let citem of getContainerContents(container.id)" (mouseenter)="startTooltipTimer($event, citem)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
                   <td>{{ citem.name }}</td>
                   <td>{{ citem.weight }} kg</td>
-                  <td>{{ citem.db || 1 }}</td>
+                  <td><input 
+                    type="number" 
+                    min="-1" 
+                    [value]="citem.db" 
+                    (change)="updateItemQuantity(citem, $event)" 
+                    class="quantity-input"
+                  /></td>
                   <td>{{ (citem.weight || 0) * (citem.db || 1) }} kg</td>
                   <td>
                     <button class="small-btn" (click)="removeFromContainer(citem)">
