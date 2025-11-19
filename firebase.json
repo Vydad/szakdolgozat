@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/szakdolgozat/browser",
+    "public": "dist/szakdolgozat/browser/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
