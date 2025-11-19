@@ -1,0 +1,851 @@
+<app-navbar></app-navbar>
+<div class="character-sheet" *ngIf="character$ | async as character">
+  <div id="roll">
+      Dobás:
+      <br>
+      {{rollShow()}}
+    </div>
+  <div>
+  <div class="header-container">
+
+  <div class="name">
+    <h1>{{ character.appearance?.name || 'Névtelen' }}</h1>
+    <p>
+      {{ raceName || 'Ismeretlen faj' }}
+      {{ className || 'Ismeretlen osztály' }}
+      – Szint {{ character.lvl }}
+    </p>
+  </div>
+
+  <div class="actions">
+    
+    <button (click)="reset()">Hosszú Pihenő</button>
+    <button id="lvl_up" (click)="openLevelUpPopup()">Szint lépés</button>
+  </div>
+<div class="popup-backdrop" *ngIf="levelUpVisible">
+  <div class="popup-window">
+
+    <button class="close-btn" (click)="closeLevelUpPopup()">✖</button>
+
+    <div class="popup-header_lvl_up">
+      <div class="left-info">
+        <h2>{{ character.appearance?.name || 'Névtelen' }}</h2>
+        <p>{{ className }}</p>
+      </div>
+      <div class="right-info">
+        <label for="levelInput">Szint: </label>
+        <input 
+          id="levelInput" 
+          type="number" 
+          [(ngModel)]="targetLevel"
+          [min]="1" 
+          [max]="20" 
+          (change)="updateAvailableTraits()"
+        />
+      </div>
+    </div>
+
+    <div class="popup-content">
+      <h3>Új képességek</h3>
+      <ul *ngIf="filteredTraits.length > 0 && filteredTraits!==undefined; else noTraits">
+        <li *ngFor="let trait of filteredTraits">
+          <strong>{{ trait.title }}</strong> — Szint: {{ trait.lvl }}
+          <p>{{ trait.description }}</p>
+        </li>
+      </ul>
+      <ng-template #noTraits>
+        <p>Nincs új trait a megadott szinten.</p>
+      </ng-template>
+    </div>
+
+    <div class="popup-footer">
+      <button class="save-btn" (click)="saveLevelUp()">Mentés</button>
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="header">
+  <div class="armory">
+    <div id="speed" class="armory-contaner">
+      Sebesség:
+      <br>
+      {{raceData.speed}}m
+    </div>
+    <div id="kezdemenyezes" class="armory-contaner">
+      Kezdeményezés:
+      <br>
+      <button class="skill-value-btn" id="initiative" (click)="roll(getInitiative())">
+      {{getInitiative()==0? getInitiative(): getInitiative()>0? "+"+getInitiative():getInitiative()}}
+      </button>
+    </div>
+    <div id="inspirácio" class="armory-contaner">
+      Inspiráció:
+      <br>
+      <input type="checkbox" [(ngModel)]="isCheckedInspiration" (change)="saveCheckbox()" class="armory-contaner" />
+    </div>
+    <div id="proficiency" class="armory-contaner">
+      Jártassági bónusz:
+      <br>
+      {{proficiencyBonus()}}
+    </div>
+    <div id="armor" class="armory-contaner">
+      Páncél:
+      <br>
+      {{ac}}
+    </div>
+  </div>
+  
+  <div class="hp">
+  <p>
+    <strong>Életerő:</strong> {{ character.hp }}/{{ maxHp }} <br>
+    <strong>Ideiglenes életerő:</strong>
+    <input 
+      type="number" 
+      [(ngModel)]="temp"
+      (ngModelChange)="updateTempHp()"
+      min="0"
+    />
+  </p>
+
+  <div class="hp-controls">
+    <input type="number" [(ngModel)]="hpDelta" min="1" />
+    
+    <!-- Sebzés -->
+    <button (click)="applyDamageOrHeal(character, -hpDelta)" id="sebzes">Sebzés</button>
+    
+    <!-- Gyógyítás -->
+    <button (click)="applyDamageOrHeal(character, hpDelta)" [disabled]="character.hp >= maxHp" id="gyogyitas">Gyógyítás</button>
+  </div>
+</div>
+</div>
+</div>
+<div class="body">
+  <div class="stat">
+  <h2>Adottságok</h2>
+  <div class="stats-container">
+    <div *ngFor="let ability of character.abilities" class="stats">
+      <div>
+        <strong>{{ ability.name }}</strong> <br>
+        {{ ability.total}} <br>
+        <h3>
+          {{
+            ability.modifier == 0
+              ? ability.modifier
+              : ability.modifier > 0
+              ? "+" + ability.modifier
+              :  + ability.modifier
+          }}
+        </h3>
+      </div>
+        <div class="skills-list">
+          <ng-container *ngFor="let skill of skills">
+            <div *ngIf="skill.type === ability.name" class="skill-row">
+              <span class="skill-name">{{ skill.name }}</span>
+              <button (click)="roll(skill.value+ability.modifier)"
+                class="skill-value-btn" 
+                [ngClass]="{
+                  'positive': (skill.value+ability.modifier) > 0,
+                  'negative': (skill.value+ability.modifier) < 0
+                }">
+                {{ skill.value+ability.modifier }}
+                
+              </button>
+            </div>
+          </ng-container>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="main_body">
+  <div class="main_body_left">
+    <div class="main_body_left_top">
+      <p>
+        <strong>Páncélok</strong><br>
+        {{character.armor}}
+      </p>
+      <hr>
+      <p>
+        <strong>Fegyverek</strong><br>
+        {{character.weapon}}
+      </p>
+      <hr>
+      <p>
+        <strong>Eszközök</strong><br>
+        {{character.tools}}
+      </p>
+      <hr>
+      <p>
+        <strong>Nyelvek</strong><br>
+        {{character.language}}
+      </p>
+    </div>
+    <div class="main_body_left_mid">
+      <h4>Mentő Dobások:</h4>
+      <table>
+        <tr>
+          <td>
+            Erő<br>
+            {{save("Erő")}}
+          </td>
+          <td>
+            Ügyesség<br>
+            {{save("Ügyesség")}}
+          </td>
+          <td>
+            Állóképesség<br>
+            {{save("Állóképesség")}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Bölcsesség<br>
+            {{save("Bölcsesség")}}
+          </td>
+          <td>
+            Intelligencia<br>
+            {{save("Intelligencia")}}
+          </td>
+          <td>
+            Karizma<br>
+            {{save("Karizma")}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="main_body_left_bot">
+      <table>
+        <tr>
+          <td>
+            Passzív Észlelés
+          </td>  
+          <td class="number">
+            {{passziv("Bölcsesség","Észlelés")}}
+          </td>        
+        </tr>
+        <tr>
+          <td>
+            Passzív Kutatás
+          </td>   
+          <td class="number">
+            {{passziv("Intelligencia","Kutatás")}}
+          </td>
+                 
+        </tr>
+        <tr>
+          <td>
+            Passzív Emberismeret
+          </td>  
+          <td class="number">
+            {{passziv("Bölcsesség","Emberismeret")}}
+          </td>
+                  
+        </tr>
+      </table>
+    </div>
+  </div>
+    <div class="main_body_right">
+      <div class="character-navbar">
+      <button 
+        *ngFor="let tab of tabs" 
+        (click)="selectTab(tab)"
+        [class.active]="selectedTab === tab">
+        {{ tab }}
+      </button>
+      <button 
+      *ngIf="character.mage==true"
+      (click)="selectTab('Varázslatok')"
+      [class.active]="selectedTab === 'Varázslatok'">
+      Varázslatok
+    </button>
+    </div>
+    <div class="character-content">
+      <ng-container [ngSwitch]="selectedTab">
+
+        <!-- ACTION -->
+        <div *ngSwitchCase="'Akciók'" class="tab-content">
+          <div class="action">
+            <h2>Akciók</h2>
+            <div class="equipment" *ngIf="characterData?.equipment?.length && equippedWeapons.length; else noAction">
+              <table class="equipment-table">
+                <thead>
+                  <tr>
+                  <th>Név</th>
+                  <th>Távolság</th>
+                  <th>Találat</th>
+                  <th>Sebzés</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of equipmentWeapon" (mouseenter)="startTooltipTimer($event, item)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.range+"m"}}</td>
+                    <td>
+                      <button (click)="roll(attackRoll(item.mod,item.type))">
+                        {{attackRoll(item.mod,item.type)>0? '+' + attackRoll(item.mod,item.type):attackRoll(item.mod,item.type)}}
+                      </button>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="item.dmg">
+                        <button 
+                          *ngFor="let dmgPart of item.dmg.split(',')" 
+                          (click)="rollDamage(item.mod,dmgPart.trim())">
+                          {{ dmgPart.trim()+dmgMod(item.mod)}}
+                        </button>
+                      </ng-container>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- Tooltip -->
+              <div
+                class="item-tooltip"
+                *ngIf="tooltipVisible"
+                [ngStyle]="{ top: tooltipY + 'px', left: tooltipX + 'px' }"
+              >
+                <h4>{{ tooltipItem?.name }}</h4>
+                <p>{{ tooltipItem?.description }}</p>
+              </div>
+            </div>
+            <ng-template #noAction>
+              <p>Nincs felszerelve fegyver.</p>
+            </ng-template>
+            <div *ngFor="let trait of characterData?.traits">
+              <div *ngIf="trait.action && trait.action_type=='a'">
+                <h4>{{ trait.name }}</h4>
+                <p>{{ trait.action_des }}</p>
+
+                <!-- Charge boxok -->
+                <div class="charge-boxes">
+                  <ng-container *ngFor="let c of getChargeArray(trait); let i = index">
+                    <input
+                      type="checkbox"
+                      [checked]="i < (trait.charge - trait.temp_charge)"
+                      (change)="toggleCharge(trait, i)"
+                    />
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bonus_action">
+            <hr>
+            <h3>Bonusz Akciók</h3>
+            <div *ngFor="let trait of characterData?.traits">
+              <div *ngIf="trait.action && trait.action_type=='ba'">
+                <h4>{{ trait.name }}</h4>
+                <span>{{trait.dmg}}</span>
+                <p>{{ trait.action_des }}</p>
+
+                <!-- Charge boxok -->
+                <div class="charge-boxes">
+                  <div
+                    *ngFor="let c of getChargeArray(trait); let i = index"
+                    class="charge-slot"
+                    [class.filled]="i < (trait.charge - trait.temp_charge)"
+                    (click)="toggleCharge(trait, i)"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bonus_action">
+            <hr>
+            <h3>Reakciók</h3>
+            <div>
+              <h4>Hátbatámadás</h4>
+              <p>Akkor használhatsz hátba támadást amikor egy lény amit látsz kilép a kar távolságodból elhasználva egy akcióját, bónusz akcióját, reakcióját vagy sebességét. A hátba támadást egy reakció elhasználásával tudod alkalmazni, ez alatt egy fegyveres vagy puszta kezes közelharci támadást tudsz használni a lény ellen. A támadás az előtt történik, hogy a lény kilépne a kar távolságodból</p>
+            </div>
+            <div *ngFor="let trait of characterData?.traits">
+              <div *ngIf="trait.action && trait.action_type=='r'">
+                <h4>{{ trait.name }}</h4>
+                <span>{{trait.dmg}}</span>
+                <p>{{ trait.action_des }}</p>
+                
+                <!-- Charge boxok -->
+                <div class="charge-boxes">
+                  <div
+                    *ngFor="let c of getChargeArray(trait); let i = index"
+                    class="charge-slot"
+                    [class.filled]="i < (trait.charge - trait.temp_charge)"
+                    (click)="toggleCharge(trait, i)"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVENTORY -->
+        <div *ngSwitchCase="'Felszerelés'" class="tab-content">
+          <div id="inventory_title">
+            <h2>Felszerelés</h2>
+
+            <div class="popup-container">
+              <button id="openInventoryBtn" (click)="toggleMenu()">Felszerelés hozzáadása</button>
+
+              <!-- Felugró ablak -->
+              <div class="popup-overlay" *ngIf="itemAdd">
+                <div class="popup-card">
+                  <button class="close-btn" (click)="hideMenu()">✖</button>
+                  <h3>Új tárgy hozzáadása</h3>
+
+                  <!-- Kereső -->
+                  <input type="text" placeholder="Keresés..." [(ngModel)]="searchTerm" class="search-input">
+
+                  <div class="item-section" *ngIf="filteredItems.fegyver.length" >
+                    <h4>⚔️ Fegyverek</h4>
+                    <div *ngFor="let item of filteredItems.fegyver | itemSearch: searchTerm" (mouseenter)="startTooltipTimer($event, item)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
+                      <span>{{ item.name }}</span>
+                      <button class="add-item-btn" (click)="addItem(item)">Hozzáadás</button>
+                    </div>
+                  </div>
+
+                  <div class="item-section" *ngIf="filteredItems.pancel.length">
+                    <h4>🛡️ Páncélok</h4>
+                    <div *ngFor="let item of filteredItems.pancel | itemSearch: searchTerm" (mouseenter)="startTooltipTimer($event, item)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
+                      <span>{{ item.name }}</span>
+                      <button class="add-item-btn" (click)="addItem(item)">Hozzáadás</button>
+                    </div>
+                  </div>
+
+                  <div class="item-section" *ngIf="filteredItems.tarolo.length">
+                    <h4>🎒 Tárolók</h4>
+                    <div *ngFor="let item of filteredItems.tarolo | itemSearch: searchTerm" (mouseenter)="startTooltipTimer($event, item)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
+                      <span>{{ item.name }}</span>
+                      <button class="add-item-btn" (click)="addItem(item)">Hozzáadás</button>
+                    </div>
+                  </div>
+
+                  <div class="item-section" *ngIf="filteredItems.egyeb.length">
+                    <h4>📦 Egyéb tárgyak</h4>
+                    <div *ngFor="let item of filteredItems.egyeb | itemSearch: searchTerm" (mouseenter)="startTooltipTimer($event, item)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
+                      <span>{{ item.name }}</span>
+                      <input type="number" class="quantity-input" min="1" [(ngModel)]="item.selectedQuantity">
+                      <button class="add-item-btn" (click)="addItem(item)">Hozzáadás</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="inventory_top">
+            <div id="maxinv">Teherbírás: {{weight +' / '+strengthTotal() * 3  }} kg</div>
+            <div class="currency-container">
+              <div class="currency-item gold">
+                <label>Arany:</label>
+                <input type="number" [(ngModel)]="character.gold" (change)="updateCurrency('gold')" min="0">
+              </div>
+
+              <div class="currency-item silver">
+                <label>Ezüst:</label>
+                <input type="number" [(ngModel)]="character.silver" (change)="updateCurrency('silver')" min="0">
+              </div>
+
+              <div class="currency-item copper">
+                <label>Réz:</label>
+                <input type="number" [(ngModel)]="character.copper" (change)="updateCurrency('copper')" min="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- MAIN INVENTORY -->
+          <div class="equipment" *ngIf="characterData?.equipment?.length; else noEquipment">
+          <table class="equipment-table">
+            <thead>
+              <tr>
+                <th>Felszerel</th>
+                <th>Név</th>
+                <th>Súly/darab</th>
+                <th>Mennyiség</th>
+                <th>Össz súly</th>
+                <th>Érték</th>
+                <th>Tároló</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of mainInventory" (mouseenter)="startTooltipTimer($event, item)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
+                <td>
+                  <ng-container *ngIf="item.type?.includes('fegyver') || item.type?.includes('páncél') || item.type?.includes('tároló'); else noCheckbox">
+                    <input
+                      type="checkbox"
+                      [checked]="item.felszerelt"
+                      #cb
+                      (change)="toggleEquip(item, cb.checked)"
+                    />
+                  </ng-container>
+                  <ng-template #noCheckbox>-</ng-template>
+                </td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.weight ? item.weight + ' kg' : '-' }}</td>
+                <td>
+                  <input 
+                    type="number" 
+                    min="-1" 
+                    [value]="item.db" 
+                    (change)="updateItemQuantity(item, $event)" 
+                    class="quantity-input"
+                  />
+                </td>
+                <td>{{ item.weight ? (item.weight * (item.db)) + ' kg' : '-' }}</td>
+                <td>{{ item.cost ? item.cost + ' gp' : '-' }}</td>
+                <td>
+
+                  <div *ngIf="item.type !== 'tároló'">
+                    <select #sel (change)="moveItemToContainer(item, sel.value)" class="container-select">
+                      <option value="">Válassz tárolót</option>
+                      <option *ngFor="let c of equippedContainers" [value]="c.id">
+                        {{ c.name }} ({{ c.capacity }} kg)
+                      </option>
+                    </select>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Tárolók megjelenítése -->
+          <div *ngFor="let container of equippedContainers" class="container-block">
+            <h4>{{ container.name }}</h4> 
+            <div id="capacity">
+              Teherbírás: {{container.inv_weight/container.light +' / '+ container.capacity  }} kg
+            </div>
+
+            <table class="equipment-table">
+              <thead>
+                <tr>
+                  <th>Név</th>
+                  <th>Súly</th>
+                  <th>Mennyiség</th>
+                  <th>Összsúly</th>
+                  <th>Művelet</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- 🔹 Csak azokat az itemeket jelenítjük meg, amiknek a tárolt mezője megegyezik a tároló id-jével -->
+                <tr *ngFor="let citem of getContainerContents(container.id)" (mouseenter)="startTooltipTimer($event, citem)" (mouseleave)="hideTooltip()" (mousemove)="moveTooltip($event)">
+                  <td>{{ citem.name }}</td>
+                  <td>{{ citem.weight }} kg</td>
+                  <td>{{ citem.db || 1 }}</td>
+                  <td>{{ (citem.weight || 0) * (citem.db || 1) }} kg</td>
+                  <td>
+                    <button class="small-btn" (click)="removeFromContainer(citem)">
+                      Kivesz
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Tooltip -->
+            <div
+              class="item-tooltip"
+              *ngIf="tooltipVisible"
+              [ngStyle]="{ top: tooltipY + 'px', left: tooltipX + 'px' }"
+            >
+              <h4>{{ tooltipItem?.name }}</h4>
+              <p>{{ tooltipItem?.description }}</p>
+            </div>
+          </div>
+          <ng-template #noEquipment>
+            <p>Nincs felszerelés.</p>
+          </ng-template>
+        </div>
+
+
+
+        <!-- BACKGROUND -->
+        <div *ngSwitchCase="'Előélet'" class="tab-content">
+          <h2>Előélet</h2>
+          <h3>Megjelenés:</h3>
+          <table class="kinezet">
+            <tr>
+              <td>
+                <strong>Név:</strong>
+                <p>{{ character.appearance?.name?.trim() || 'Névtelen' }}</p>
+              </td>
+              <td>
+                <strong>Kor:</strong>
+                <p>{{ character.appearance?.age?.trim() || 'Nincs megadva' }}</p>
+              </td>
+              <td>
+                <strong>Nem:</strong>
+                <p>{{ character.appearance?.gender?.trim() || 'Nincs megadva' }}</p>
+              </td>
+              <td>
+                <strong>Magasság:</strong>
+                <p>{{ character.appearance?.height?.trim() || 'Nincs megadva' }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Súly:</strong>
+                <p>{{ character.appearance?.weight?.trim() || 'Nincs megadva' }}</p>
+              </td>
+              <td>
+                <strong>Szemszín:</strong>
+                <p>{{ character.appearance?.eyeColor?.trim() || 'Nincs megadva' }}</p>
+              </td>
+              <td>
+                <strong>Hajszín:</strong>
+                <p>{{ character.appearance?.hairColor?.trim() || 'Nincs megadva' }}</p>
+              </td>
+              <td>
+                <strong>Bőrszín:</strong>
+                <p>{{ character.appearance?.skinTone?.trim() || 'Nincs megadva' }}</p>
+              </td>
+            </tr>
+          </table>
+          <h3>Előélet:</h3>
+          <strong>{{backgroundName}}</strong>
+          <p id="backgroundDescription">{{backgroundDescription}}</p>
+        </div>
+
+        <!-- TRAITS -->
+        <div *ngSwitchCase="'Jellemzők'" class="tab-content">
+          <h2>Jellemzők</h2>
+
+          <h3>{{ raceName }}:</h3>
+          <ng-container *ngIf="raceTraits.length > 0; else noRaceTraits">
+            <div *ngFor="let trait of raceTraits" class="trait-item">
+              <strong>{{trait.title}}</strong>
+              <p>{{ trait.description }}</p>
+            </div>
+          </ng-container>
+          <ng-template #noRaceTraits>
+            <p>Nincsenek fajhoz tartozó jellemzők.</p>
+          </ng-template>
+
+          <h3>{{ className }}:</h3>
+          <ng-container *ngIf="classTraits.length > 0; else noClassTraits">
+            <ng-container *ngFor="let trait of classTraits">
+              <div class="trait-item" *ngIf="!trait.lvl || trait.lvl <= lvl">
+                <strong>{{ trait.title +" ("+trait.lvl +".szint)"}}</strong>
+                <p>{{ trait.description }}</p>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #noClassTraits><p>Nincsenek kaszthoz tartozó jellemzők.</p></ng-template>
+
+          <h3>{{ backgroundName }}:</h3>
+          <ng-container *ngIf="backgroundTraits.length > 0; else noBackgroundTraits">
+            <div *ngFor="let trait of backgroundTraits" class="trait-item">
+              <strong>{{trait.title}}</strong>
+              <p>{{ trait.description }}</p>
+            </div>
+          </ng-container>
+          <ng-template #noBackgroundTraits><p>Nincsenek háttérhez tartozó jellemzők.</p></ng-template>
+        </div>
+
+        <!-- SPELLS -->
+        <div *ngSwitchCase="'Varázslatok'" class="tab-content">
+          <div class="spell-header">
+            <h2>Varázslatok</h2>
+            <button class="spell-btn" (click)="openSpellPopup()">Mágia bekészítése</button>
+          </div>
+          <div class="spell-stats-container">
+            <table class="spell-table">
+              <tr>
+                <th>Módosító</th>
+                <th>Spell Attack</th>
+                <th>Save DC</th>               
+              </tr>
+              <tr>
+                <td>{{ spellModifier()>0?"+"+spellModifier():spellModifier() }}</td>
+                <td>{{ (spellModifier()+proficiency)>0?"+"+ (spellModifier()+proficiency):(spellModifier()+proficiency) }}</td>
+                <td>{{ 8+spellModifier()+proficiency }}</td>
+              </tr>
+            </table>
+            <!-- SPELL SELECTION POPUP -->
+            <div class="popup-backdrop" *ngIf="spellPopupVisible">
+              <div class="popup-window">
+
+                <button class="close-btn" (click)="closeSpellPopup()">✖</button>
+
+                <div class="popup-header">
+                  <h2>Varázslat kiválasztása</h2>
+                  <br>
+                  {{"Bekészített Varázsfortélyok: "+(character?.cantrips?.length || 0) +"/"+ varazstoltesMax}}
+                  <br>
+                  {{"Bekészített varázslatok: "+ (character?.prepared_spells?.length || 0) + "/" + (spellModifier() + lvl) }}
+                </div>
+
+                <input 
+                  type="text" 
+                  placeholder="Keresés spellre..."
+                  [(ngModel)]="spellSearch"
+                  class="search-input"
+                />
+
+                <!-- Szintek -->
+                <div class="spell-section" *ngFor="let level of [0,1,2,3,4,5,6,7,8,9]">
+                  <!-- Csak ha van olyan spell ezen a szinten -->
+                  <div *ngIf="(allSpells | spellFilter: spellSearch : className) | hasSpellLevel: level">
+                    <h3>{{ level === 0 ? "Varázsfortély" : level + ". szint" }}</h3>
+
+                    <table class="spell-table">
+                      <ng-container *ngFor="let spell of (allSpells | spellFilter: spellSearch : className)">
+                        <tr *ngIf="spell.lvl === level">
+                          <td>{{ spell.name }}</td>
+                          <td class="action-buttons">
+                            <button  
+                              class="prepare-btn"
+                              [class.remove]="isSpellPrepared(spell)"
+                              (click)="prepareSpell(spell)"
+                              [disabled]="isSpellPrepared(spell) ? false : hasReachedLimit(level)"
+                            >
+                              {{ isSpellPrepared(spell) ? 'Töröl' : 'Bekészít' }}
+                            </button>
+                          </td>
+                          <td>
+                            <button (click)="toggleSpellDetails(spell, level)" class="details-btn">
+                              {{ openedSpellId[level] === spell.name ? 'Bezár' : 'Bővebben' }}
+                            </button>
+                          </td>
+                        </tr>
+
+                        <!-- részletek -->
+                        <tr *ngIf="openedSpellId[level] === spell.name">
+                          <td colspan="3" class="spell-details">
+                            <div class="spell-info-box">
+                              <table class="spell-details-table">
+                                <tr><td><strong>Iskola:</strong></td><td>{{ spell.school }}</td></tr>
+                                <tr><td><strong>Idő:</strong></td><td>{{ spell.casting_time }}</td></tr>
+                                <tr><td><strong>Hatótáv:</strong></td><td>{{ spell.range }}</td></tr>
+                                <tr><td><strong>Komponensek:</strong></td><td>{{ spell.component }}</td></tr>
+                                <tr><td><strong>Időtartam:</strong></td><td>{{ spell.time }}</td></tr>
+                              </table>
+                              <br>
+                              <p>{{ spell.description }}</p>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="spell-lists">
+
+              <!-- 🔹 Cantripek -->
+              <h3 class="left">Varázsfortélyok</h3>
+              <table class="spell-table2">
+                <thead>
+                  <tr>
+                    <th>Név</th>
+                    <th>Sebzés</th>
+                    <th>Kitérés/Találat</th>
+                    <th>Idő</th>
+                    <th>Hatótáv</th>
+                    <th>Komponensek</th>
+                    <th>Időtartam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let spell of character?.cantrips || []">
+                    <td>{{ spell.name }}</td>
+                    <td>
+                      <ng-container *ngIf="spell.dmg && spell.dmg !== ''; else noDmg">
+                        <button class="dmg-btn" (click)="rollDamage('',spell.dmg)">{{ spell.dmg }}</button>
+                      </ng-container>
+                      <ng-template #noDmg>-</ng-template>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="spell.dc === 'találat'; else dcValue">
+                        <button class="dc-btn" (click)="roll((spellModifier()+proficiency))">{{(spellModifier()+proficiency)>0?"+"+ (spellModifier()+proficiency):(spellModifier()+proficiency)}}</button>
+                      </ng-container>
+                      <ng-template #dcValue>
+                        {{ spell.dc === '' || spell.dc == null ? '-' : spell.dc }}
+                      </ng-template>
+                    </td>
+                    <td>{{ spell.casting_time }}</td>
+                    <td>{{ spell.range }}</td>
+                    <td>{{ spell.component }}</td>
+                    <td>{{ spell.time }}</td>
+                  </tr>
+                  <tr *ngIf="!character?.cantrips?.length">
+                    <td colspan="4" class="no-spell">Nincs varázsfortály bekészítve.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <br>
+
+              <!-- 🔹 PrepareSpell-ek szintenként -->
+              <div class="prepared-spells">
+                <div *ngFor="let level of [1,2,3,4,5,6,7,8,9]">
+                  <ng-container *ngIf="getPreparedSpellsByLevel(level).length > 0 && getVarazstoltesTrait().charge?.[level] !==undefined">
+                    <ng-container *ngIf="getVarazstoltesTrait() as vt">
+                      <div class="spell-level-header">
+                        <h3 class="left">{{ level }}. szintű varázslatok</h3>
+                        <!-- csak akkor jelenjen meg, ha van charge és temp_charge -->
+                        <div
+                          class="charge-boxes"
+                          *ngIf="vt.charge?.[level] !== undefined"
+                        >
+                          <div
+                            *ngFor="let c of getChargeArraySpell(vt.charge[level]); let i = index"
+                            class="charge-slot"
+                            [class.filled]="i < (vt.charge[level] - vt.temp_charge[level])"
+                            (click)="toggleSpellCharge(vt, level, i)"
+                          ></div>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <table class="spell-table2">
+                      <thead>
+                        <tr>
+                          <th>Név</th>
+                          <th>Sebzés</th>
+                          <th>Kitérés/Találat</th>
+                          <th>Idő</th>
+                          <th>Hatótáv</th>
+                          <th>Komponensek</th>
+                          <th>Időtartam</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let spell of getPreparedSpellsByLevel(level)">
+                          <td>{{ spell.name }}</td>
+                          <td>
+                            <ng-container *ngIf="spell.dmg; else noDmg">
+                              <button class="dmg-btn" (click)="rollDamage('', spell.dmg)">
+                                {{ spell.dmg }}
+                              </button>
+                            </ng-container>
+                            <ng-template #noDmg>-</ng-template>
+                          </td>
+                          <td>
+                            <ng-container *ngIf="spell.dc === 'találat'; else dcValue">
+                              <button class="dc-btn" (click)="roll(spellModifier() + proficiency)">
+                                {{ (spellModifier() + proficiency) > 0 ? '+' + (spellModifier() + proficiency) : (spellModifier() + proficiency) }}
+                              </button>
+                            </ng-container>
+                            <ng-template #dcValue>
+                              {{ spell.dc || '-' }}
+                            </ng-template>
+                          </td>
+                          <td>{{ spell.casting_time }}</td>
+                          <td>{{ spell.range }}</td>
+                          <td>{{ spell.component }}</td>
+                          <td>{{ spell.time }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
+</div>
+</div>
+</div>

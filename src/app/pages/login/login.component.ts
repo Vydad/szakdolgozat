@@ -22,7 +22,7 @@ export class LoginComponent {
 
   onLogin() {
     this.authService.login(this.email, this.password)
-      .then(() => this.router.navigate(['/']))
+      .then(() => this.router.navigate(['/home']))
       .catch(error => {
         this.errorMessage = error.message;  // Hibaüzenet megjelenítése
         console.error(error);

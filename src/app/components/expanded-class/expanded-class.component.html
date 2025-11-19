@@ -1,0 +1,110 @@
+<div class="expandable-card">
+  <div class="card-header">
+    <h2>Kasztok</h2> 
+    <button (click)="toggleExpand()" class="expand-btn">
+      {{ expanded ? 'Bezárás' : 'Bővítés' }}
+    </button>
+  </div>
+    
+  
+    <!-- Ha bővítve van, akkor megjelenik a kasztok listája -->
+    <div *ngIf="expanded" class="class-list">
+      <div *ngFor="let card of children">
+        <div class="class-item">
+          <div class="card-header">
+          <h3>{{ card.name }}</h3>
+          <button (click)="toggleClassDetails(card.id)" class="expand-btn">
+            {{ expandedClassId === card.id ? 'Bezárás' : 'Bővítés' }}
+          </button>
+          
+        </div>
+          <!-- A kaszt részletes adatai, ha kibővítve -->
+          <div *ngIf="expandedClassId === card.id" class="class-details"> 
+            <button (click)="kivalaszt(card.id,card.armors,card.weapons,card.saves,card.mage,card.spell_mod)" class="kivalaszt">
+              {{ classId === card.id ? 'Kiválasztva' : 'Kiválasztás' }}
+            </button>
+            <strong for="numberSelect">Szint: </strong>
+            <input type="number" id="level" value="1" [min]="1" [max]="20" (input)="updatelvl($event)">
+            <p><strong>Leírás:</strong><br> 
+              {{ card.description }}
+            </p>
+            <p><strong>HP:</strong> <br>
+              {{ card.hp }}{{setHpRace(card.hp)}}
+            </p>
+            <p><strong>Eszközjártasság:</strong><br>
+              <ng-container *ngIf="card.tools?.length === 0">
+                <em>Nincs eszközjártasság</em>
+              </ng-container>
+              <ng-container *ngIf="card.tools?.length > 0">
+                <ng-container *ngIf="card.tools[0]==0; else selectTools">
+                  <div *ngFor="let tool of card.tools | slice:1">
+                    - {{ tool }}
+                    {{ defaultTool(card.id, tool) }}
+                  </div>
+                </ng-container>
+                <ng-template #selectTools>
+                  <div *ngIf="initToolSelection(card)">
+                    <div *ngFor="let _ of selectedTools[card.id]; let i = index">
+                      <select
+                        [ngModel]="selectedTools[card.id][i]"
+                        (ngModelChange)="onSelectTool(card.id, i, $event)">
+                        <option [ngValue]="null" disabled>-- Válassz egyet --</option>
+                        <option *ngFor="let option of getToolOptions(card, card.id, i)" [ngValue]="option">
+                          {{ option }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-container>
+            </p>
+            <p><strong>Készségek:</strong><br>
+              <ng-container *ngIf="card.skills?.length === 0">
+                <em>Nincs készség</em>
+              </ng-container>
+              <ng-container *ngIf="card.skills?.length > 0">
+                <ng-container *ngIf="card.skills[0]==0; else selectSkills">
+                  <div *ngFor="let skill of card.skills | slice:1">
+                    - {{ skill }}
+                    {{ defaultSkill(card.id, skill) }}
+                  </div>
+                </ng-container>
+                <ng-template #selectSkills>
+                  <div *ngIf="initSkillSelection(card)">
+                    <div *ngFor="let _ of selectedSkills[card.id]; let i = index">
+                      <select
+                        [ngModel]="selectedSkills[card.id][i]"
+                        (ngModelChange)="onSelectSkill(card.id, i, $event)">
+                        <option [ngValue]="null" disabled>-- Válassz egyet --</option>
+                        <option *ngFor="let option of getSkillOptions(card, card.id, i)" [ngValue]="option">
+                          {{ option }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-container>
+            </p>
+            <p><strong>Mentődobások:</strong><br>
+              {{card.saves_des}}
+            <p>
+            <p><strong>Páncélok:</strong><br>
+              {{card.armors_des}}
+            <p>
+            <p><strong>Fegyverek:</strong><br>
+              {{card.weapons_des}}
+            <p>
+            <ng-container *ngFor="let group of groupedTraits(card.name)">
+              <div *ngIf="group.level<=lvl">
+                <p><strong class="lvl">Szint: {{ group.level }}</strong></p>
+                <div *ngFor="let trait of group.traits">
+                  <p><strong>{{ trait.title }}:</strong><br>{{ trait.description }}</p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

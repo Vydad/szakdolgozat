@@ -1,9 +1,43 @@
 <nav class="navbar">
     <div>
-        <a routerLink="/" routerLinkActive="active">Főoldal</a>
+        <a routerLink="/home" routerLinkActive="active">Főoldal</a>
+        <a routerLink="/characters" routerLinkActive="active" *ngIf="authService.isAuthenticated()">Karakterek</a>
+        <a routerLink="/campaigns" routerLinkActive="active" *ngIf="authService.isAuthenticated()">Kapmányok</a>
     </div>
     <div id="log">
-        <a routerLink="/login" routerLinkActive="active" >Bejelentkezés</a>
+        <button *ngIf="!authService.isAuthenticated()" routerLink="/login" routerLinkActive="active" >Bejelentkezés</button>
+        <button *ngIf="authService.isAuthenticated()" (click)="toggleAccountPanel()" class="account-btn">Fiók</button>
     </div>
 </nav>
-  
+<div class="account-overlay" *ngIf="showAccountPanel" (click)="toggleAccountPanel()">
+  <div class="account-panel" (click)="$event.stopPropagation()">
+
+    <p><strong>Email:</strong> <br>{{ userEmail }}</p>
+
+    <div class="input-wrapper">
+    <input type="password"
+            [(ngModel)]="currentPassword"
+            placeholder="Régi jelszó" />
+    </div>
+
+    <div class="input-wrapper">
+    <input type="password"
+            [(ngModel)]="newPassword"
+            placeholder="Új jelszó"
+            title="Legalább 8 karakter, 1 nagybetű, 1 szám"/>
+    </div>
+
+    <div class="input-wrapper">
+    <input type="password"
+            [(ngModel)]="confirmPassword"
+            placeholder="Új jelszó újra" />
+    </div>
+
+    <p class="error" *ngIf="passwordError">{{ passwordError }}</p>
+    <p class="success" *ngIf="passwordSuccess">{{ passwordSuccess }}</p>
+
+    <button class="change-pass-btn" (click)="submitPasswordChange()">Jelszó módosítása</button>
+    <button class="logout-btn" (click)="logout()">Kijelentkezés</button>
+
+  </div>
+</div>

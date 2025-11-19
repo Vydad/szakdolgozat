@@ -1,0 +1,175 @@
+#main {
+  margin-top: 65px;
+  padding: 20px;
+}
+
+.top {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#new button {
+  background-color: #7c0f0f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  min-height: 30px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.card {
+  background-image: url("/assets/images/card_bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position:center center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  position: relative;
+}
+
+
+.card h2 {
+  margin-top: 3.5%;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card button {
+  background-color: #7c0f0f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#bot.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+#bot button{
+    float: right;
+}
+.delete-btn {
+  background-color: #8b0000;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+
+  &:hover {
+    background-color: #5a0000;
+  }
+}
+/* Háttér elhomályosítása */
+.popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Popup ablak */
+.popup2 {
+  background: #2b1b19;
+  border: 2px solid #d5b462;
+  box-shadow: 0 0 18px rgba(213, 180, 98, 0.45);
+  border-radius: 12px;
+  padding: 25px;
+  width: 350px;
+  text-align: center;
+  animation: fadeIn 0.25s ease-out;
+  color: #f4e9c4;
+}
+
+/* Cím és leírás */
+.popup2 h3 {
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: #f7d277;
+  font-weight: bold;
+}
+
+.popup2 p {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* Gombok sorban */
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Gombok */
+button.cancel,
+button.confirm {
+  width: 50%;
+  padding: 10px 0;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.95rem;
+}
+
+/* Mégse gomb */
+button.cancel {
+  background: #444;
+  color: #fff;
+  border: 1px solid #999;
+
+  &:hover {
+    background: #555;
+  }
+}
+
+/* Kilépés gomb */
+button.confirm {
+  background: #7c0f0f;
+  border: 1px solid #d5b462;
+  color: #fff;
+
+  &:hover {
+    background: #a31212;
+    transform: scale(1.03);
+  }
+}
+
+/* Popup animáció */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

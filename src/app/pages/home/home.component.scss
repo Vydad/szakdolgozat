@@ -1,0 +1,119 @@
+  .card-container {
+    display: flex;
+    flex-wrap: wrap; /* Ha nincs elég hely, a kártyák új sorba kerülnek */
+    justify-content: center;
+    gap: 20px;
+    max-width: 800px; /* Hogy két kártyánál ne férjen több egy sorba */
+    margin: 0 auto; /* Középre igazítás */
+  }
+  
+  .card {
+    width: calc(50% - 10px); /* Két kártya fér el egy sorban */
+    max-width: 320px; /* Ne legyen túl széles */
+    height: 200px;
+    background: #7c0f0f;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    padding: 15px;
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+  
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      background: #f7ef8a;
+      color: black;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  .expanded-card {
+    width: 80vw;
+    height: 80vh;
+    background: #550505;
+    padding: 40px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transform: scale(0.5);
+    animation: expand 0.4s ease-in-out forwards;
+  }
+
+  .expanded-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Sötét háttér */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+  }
+
+  #main{
+    margin-top: 65px;
+  }
+
+  h1{
+    text-align: center;
+  }
+  
+  #default{
+    width: 80%;
+    text-align: center;
+    font-size: large;
+    margin: auto;
+  }
+
+  .expanded-card button {
+    position: absolute;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    background: #f7ef8a;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes expand {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      width: 100%; /* Egy sorban csak egy kártya legyen */
+    }
+  }

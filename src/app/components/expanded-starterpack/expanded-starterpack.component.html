@@ -1,0 +1,33 @@
+<div class="expandable-card">
+  <div class="card-header">
+    <h2>Kezdő Felszerelés</h2>
+    <button (click)="toggleExpand()" class="expand-btn">
+      {{ expanded() ? 'Bezárás' : 'Bővítés' }}
+    </button>
+  </div>
+
+  <div *ngIf="expanded()" class="appearance-form">
+    <div *ngIf="expanded" class="container">
+      <div class="equipment-list">
+        <div *ngFor="let item of equipment" class="equipment-card">
+          <div class="card-row">
+            <label>{{ item.name }}:</label>
+            <select (change)="selectOption(item.id, $event)">
+              <option *ngFor="let option of item.options" [value]="option.value" [selected]="option.value === item.selected">
+                {{ option.value }}
+              </option>
+            </select>
+          </div>
+          <div class="description">
+            {{ getDescription(item) }}
+          </div>
+        </div>
+        <strong>Felszerelés:</strong>
+        <ul>
+          <li *ngFor="let item of finalEquipment">
+            {{ item.db }} {{ item.name }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>

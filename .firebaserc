@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "szakdolgozat-8a45b"
-  }
+    "default": "szakdolgozat-8a45b",
+    "szakdolgozat": "szakdolgozat-8a45b"
+  },
+  "targets": {},
+  "etags": {}
 }

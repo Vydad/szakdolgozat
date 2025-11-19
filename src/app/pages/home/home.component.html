@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+<div id="main">
+    <h1>Üdvözöllek a weboldalon!</h1>
+    <div id="default">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet interdum ipsum, lacinia maximus erat. Pellentesque felis odio, rutrum a elit eu, tincidunt auctor eros. Duis eu enim ac felis auctor venenatis. In nunc nisi, venenatis ac vulputate ultrices, tempus efficitur eros. Fusce efficitur commodo augue, vel scelerisque eros ultrices a. Suspendisse semper condimentum sem sit amet semper. Maecenas ac metus ullamcorper, ultricies lorem et, tincidunt leo. Vivamus vel pharetra turpis, sit amet bibendum magna. Praesent sodales felis non tortor facilisis, in vehicula diam tempus. Etiam id urna auctor, tincidunt erat sit amet, semper est. Nullam vel rhoncus orci. Duis vel congue nisl. In vel urna malesuada, pellentesque massa at, congue nunc. Donec convallis felis a dui malesuada suscipit. Proin gravida nisi vitae neque ornare, eu malesuada lectus posuere. Nunc ultrices nisi lectus, sit amet tincidunt enim mollis vel.</p>
+
+<p>Sed ac pulvinar nunc. Aenean placerat sit amet elit a ullamcorper. Morbi risus augue, tempus eget diam vel, facilisis molestie nulla. In accumsan urna a felis euismod, a auctor sem semper. Maecenas consectetur magna sed ante placerat, in interdum orci gravida. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vitae sapien vel nisl volutpat convallis vitae eget massa. Nullam in ullamcorper metus.</p>
+
+    <p>Aliquam vel fermentum eros, sit amet elementum nibh. Fusce tristique eros sed laoreet feugiat. Nam elit augue, finibus ut venenatis vitae, bibendum sit amet quam. Nunc luctus, magna quis fermentum mattis, elit leo dignissim tortor, at gravida ipsum eros nec tortor. Quisque vel diam diam. Pellentesque at consectetur odio. Phasellus vitae tellus sed arcu sodales congue at nec massa. Nullam in neque quis lectus dictum viverra ac non est. Sed finibus libero sit amet mauris luctus, et aliquet eros mollis. Etiam consectetur ultrices elit, in volutpat ipsum dignissim ac. Etiam vitae tellus accumsan, accumsan quam sit amet, imperdiet magna.</p>
+
+        <p>Morbi vehicula sapien vitae lectus facilisis interdum. Duis ut turpis dui. Suspendisse mollis leo ipsum, non aliquet sapien condimentum eget. Nullam tincidunt arcu sed justo mollis, sit amet tincidunt felis convallis. Aenean pharetra est sed congue laoreet. Suspendisse tincidunt nisl eget libero sagittis, quis dignissim elit fermentum. Proin a urna fermentum, feugiat magna sit amet, rutrum orci. Cras sagittis felis consectetur arcu interdum, sed aliquam mauris fermentum. Nam hendrerit quam id arcu rutrum efficitur. Proin lacinia sapien non nibh rhoncus, a ultricies arcu imperdiet. Suspendisse vulputate nibh metus, quis placerat urna condimentum vitae. Phasellus tincidunt posuere lectus eget egestas. Vivamus semper nulla nec finibus venenatis. In eget semper mauris.</p>
+
+            <p>Duis gravida tempor lectus a lacinia. Curabitur sit amet lacinia lacus, ac aliquam justo. Ut sit amet mi metus. Praesent neque augue, tempor sit amet odio sed, lobortis luctus nunc. Pellentesque maximus, orci non sagittis blandit, dui lacus malesuada turpis, sit amet bibendum massa magna elementum ante. Cras consequat leo in enim dictum tristique. Donec ac condimentum nisl. Integer semper urna eget ligula rhoncus, ut aliquam ipsum rhoncus.</p>
+    </div>
+    <div class="card-container">
+        <div class="card" >
+          <h3>Világ leírás</h3>
+          <button (click)="expandCard('vilag', $event); $event.stopPropagation()">Bővebben</button>
+        </div>
+      
+        <div class="card" (click)="expandCard('tortenetek', $event)">
+          <h3>Történetek</h3>
+          <button (click)="expandCard('tortenetek', $event); $event.stopPropagation()">Bővebben</button>
+        </div>
+      
+        <div class="card" (click)="expandCard('magia', $event)">
+          <h3>Mágia</h3>
+          <button (click)="expandCard('magia', $event); $event.stopPropagation()">Bővebben</button>
+        </div>
+      </div>
+      
+      <!-- Overlay az expanded cardhoz -->
+      <div *ngIf="expandedCard" class="expanded-overlay">
+        <div class="expanded-card">
+            <app-expanded-card></app-expanded-card>
+          <h2>{{ expandedCard | titlecase }}</h2>
+          <p>Részletes leírás ehhez a kategóriához...</p>
+          <button (click)="closeCard($event)">Bezárás</button>
+        </div>
+      </div>
+</div>

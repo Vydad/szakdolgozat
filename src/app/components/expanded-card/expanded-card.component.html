@@ -1,0 +1,16 @@
+<div class="expanded-card">
+  <!-- Sidebar navigáció -->
+  <div class="sidebar">
+    <ul>
+      <li *ngFor="let navItem of filteredCards">
+        <button (click)="selectnav(navItem)" class="action">{{ navItem.title }}</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- A fő tartalom -->
+  <div class="content">
+    <h2>{{ selectedNav?.title }}</h2>
+    <p>{{ selectedNav?.description }}</p>
+  </div>
+</div>

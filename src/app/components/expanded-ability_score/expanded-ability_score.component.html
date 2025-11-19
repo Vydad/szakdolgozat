@@ -1,0 +1,51 @@
+<div class="expandable-card">
+  <div class="card-header">
+    <h2>Adottság</h2> 
+    <button (click)="raceBonus()"(click)="toggleExpand()" class="expand-btn">
+      {{ expanded ? 'Bezárás' : 'Bővítés' }}
+    </button>
+  </div>
+<div *ngIf="expanded" class="container">
+  <div class="mode-buttons">
+    <button [class.active]="mode() === 'point'" (click)="switchMode('point')">Pont alapú</button>
+    <button [class.active]="mode() === 'custom'" (click)="switchMode('custom')">Egyedi</button>
+  </div>
+
+  <p *ngIf="mode() === 'point'">Elérhető pontok: {{ remainingPoints() }} / {{ totalPoints }}</p>
+
+  <div class="grid">
+    <div *ngFor="let ability of abilities(); let i = index" class="selector">
+      <label>{{ ability.name }}</label>
+      <select class="dropdown" [value]="ability.value" (change)="updateValue(i, $event)">
+        <option *ngFor="let val of getAvailableValues(ability.value)" [value]="val" [selected]="val === 8">
+          {{ val }}
+          <ng-container *ngIf="mode() === 'point'">
+            {{ formatPointCost(getPointDifference(ability.value, val)) }}
+          </ng-container>
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <table class="summary">
+    <thead>
+      <tr>
+        <th>Adottság</th>
+        <th>Összesen</th>
+        <th>Módosító</th>
+        <th>Fajbónusz</th>
+        <th>Hozzáadás</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ability of abilities(); let i = index">
+        <td>{{ ability.name }}</td>
+        <td>{{ ability.total }}</td>
+        <td>{{ ability.modifier >= 0 ? '+' : ''}}{{ ability.modifier }}</td>
+        <td>{{ ability.bonus >= 0 ? '+' : ''}}{{ ability.bonus }}</td>
+        <td><input type="number" [value]="ability.override ?? ''" (input)="updateOverride(i, $event)" /></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>

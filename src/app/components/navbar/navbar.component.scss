@@ -9,6 +9,7 @@
     top: 0;
     left: 0;
     right: 0;
+    max-height: 40px;
   }
   
   .navbar a {
@@ -21,6 +22,17 @@
     font-size: medium;
     margin-right:30px ;
   }
+  .navbar button {
+    color: black;
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: #f7ef8a;
+    border: none;
+    border-radius: 10px;
+    font-size: medium;
+    margin-right:30px ;
+    cursor: pointer;
+  }
   
   .left {
     flex: 1;
@@ -31,3 +43,97 @@
     text-align: right;
   }
   
+  .account-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Háttér sötétítés */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+ .account-panel {
+  background: #7c0f0f;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  min-width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;       // középre igazítás minden gyerekre
+
+  h3, p {
+    margin: 5px 0;
+    text-align: center;
+  }
+
+  .input-wrapper {
+    width: 100%;
+    max-width: 200px;
+    display: flex;
+    justify-content: center;  // középre
+  }
+
+  .input-wrapper input,
+  input {
+    width: 100%;
+    max-width: 200px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #e8d56b;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    text-align: center;
+  }
+
+  .change-pass-btn,
+  .logout-btn {
+    width: 100%;
+    max-width: 200px;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    justify-content: center;   // gomb szövege középre
+    margin: 0;                 // eltávolítjuk a margint
+  }
+
+  .change-pass-btn {
+    background: #f7ef8a;
+    color: black;
+    font-weight: bold;
+  }
+
+  .logout-btn {
+    background: #c94444;
+    color: white;
+    margin-top: 5px;
+  }
+
+  .error, .success {
+    text-align: center;
+    width: 100%;
+    max-width: 200px;
+  }
+
+  input[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: #000;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    top: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+}

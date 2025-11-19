@@ -1,0 +1,51 @@
+<div class="expandable-card">
+  <div class="card-header">
+    <h2>Leírás</h2>
+    <button (click)="toggleExpand()" class="expand-btn">
+      {{ expanded() ? 'Bezárás' : 'Bővítés' }}
+    </button>
+  </div>
+  
+  <div *ngIf="expanded()" class="appearance-form">
+
+    <div class="form-field">
+      <label for="name">Név:</label>
+      <input id="name" type="text" (input)="updateField('name', $event)">
+    </div>
+
+    <div class="form-field">
+      <label for="age">Kor:</label>
+      <input id="age" type="number" (input)="updateField('age', $event)" min="0">
+    </div>
+
+    <div class="form-field">
+      <label for="gender">Nem:</label>
+      <input id="gender" type="text" (input)="updateField('gender', $event)">
+    </div>
+
+    <div class="form-field">
+      <label for="height">Magasság (cm):</label>
+      <input id="height" type="number" (input)="updateField('height', $event)" min="0">
+    </div>
+
+    <div class="form-field">
+      <label for="weight">Súly (kg):</label>
+      <input id="weight" type="number" (input)="updateField('weight', $event)" min="0">
+    </div>
+
+    <div class="form-field">
+      <label for="eyeColor">Szemszín:</label>
+      <input id="eyeColor" type="text" (input)="updateField('eyeColor', $event)">
+    </div>
+
+    <div class="form-field">
+      <label for="hairColor">Hajszín:</label>
+      <input id="hairColor" type="text" (input)="updateField('hairColor', $event)">
+    </div>
+
+    <div class="form-field">
+      <label for="skinTone">Bőrszín:</label>
+      <input id="skinTone" type="text" (input)="updateField('skinTone', $event)">
+    </div>
+  </div>
+</div>

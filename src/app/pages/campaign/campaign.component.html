@@ -1,0 +1,52 @@
+<app-navbar></app-navbar>
+
+  <div *ngIf="campaign; else loading" class="campaign-container">
+
+    <h1>{{ campaign.name }}</h1>
+    <p class="description">{{ campaign.description }}</p>
+      {{'http://localhost:4200/join/campaign/'+id}}
+    <div *ngIf="isOwner">
+      <p><b>Te vagy a kampány létrehozója</b></p>
+    </div>
+
+    <h2>Karakterek a kampányban</h2>
+
+      <div class="character-list">
+        <div class="character-card" *ngFor="let char of charactersInCampaign">
+          <h3>{{ char.appearance?.name }}</h3>
+          <p>Szint: {{ char.lvl }}</p>
+          <div class="button-row">
+            <!-- A tulajdonos vagy a karakter gazdája nyithatja meg -->
+            <button *ngIf="char.userId === currentUserId || isOwner" class="leave-btn" (click)="showLeavePopup = true">
+              Kilépés
+            </button>
+            <button *ngIf="char.userId === currentUserId || isOwner" class="open-btn"
+                    (click)="openCharacter(char.id)">
+              Megnyitás
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kilépés gomb ha nem tulaj -->
+      
+  </div>
+<!-- Kilépési megerősítő popup -->
+<div class="popup-backdrop" *ngIf="showLeavePopup">
+  <div class="popup">
+    <h3>Biztosan ki akarsz lépni a kampányból?</h3>
+    <p>Ezzel a karaktered kikerül a kampányból.</p>
+
+    <div class="btn-group">
+      <button class="cancel" (click)="showLeavePopup = false">Mégse</button>
+      <button class="confirm" (click)="leaveCampaign()">Kilépés</button>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <p>Betöltés...</p>
+</ng-template>
+
+<div *ngIf="!campaign">
+  <p>Betöltés...</p>
+</div>

@@ -1,0 +1,54 @@
+#main {
+    margin-top: 100px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: gray;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Biztosítja, hogy a tartalom egymás alatt legyen */
+    align-items: center; 
+}
+
+h1 {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.classes {
+    margin-top: 10px; 
+    padding: 15px;
+    background-color: lightgray;
+    border-radius: 8px;
+    width: 95%; 
+    justify-content: center;
+    gap: 10px;
+}
+.create-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+  
+    &:hover {
+      background-color: #218838;
+    }
+  
+    &:active {
+      transform: scale(0.97);
+    }
+  
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(72, 180, 97, 0.5);
+    }
+  }
+  #gomb{
+    text-align: center;
+  }
+  
