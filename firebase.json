@@ -1,7 +1,7 @@
 {
   "hosting": {
     "target": "szakdolgozat",
-    "public": "browser",
+    "public": "dist/szakdolgozat/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [{"source": "**", "destination": "/index.html"}]
   }
