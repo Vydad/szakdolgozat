@@ -1166,16 +1166,30 @@ ngOnInit(): void {
     const kitartasMod = kitartas?.modifier || 0;
     const newLevel = this.targetLevel;
     if (newLevel>this.lvl) {
-      updateDoc(doc(this.firestore, `character/${this.characterId}`), {
-        lvl: newLevel,
-        hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
-      });
+      if(newLevel+this.lvl>=20){
+        updateDoc(doc(this.firestore, `character/${this.characterId}`), {
+          lvl: newLevel,
+          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
+        });
+      }else{
+        updateDoc(doc(this.firestore, `character/${this.characterId}`), {
+          lvl: 20,
+          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
+        });
+      }
     }
     else{
-      updateDoc(doc(this.firestore, `character/${this.characterId}`), {
-        lvl: newLevel,
-        hp: this.maxHp- ((this.baseHp+kitartasMod)*(this.lvl-newLevel))
-      });
+      if(newLevel+this.lvl<1){
+        updateDoc(doc(this.firestore, `character/${this.characterId}`), {
+          lvl: 1,
+          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
+        });
+      }else{
+        updateDoc(doc(this.firestore, `character/${this.characterId}`), {
+          lvl: newLevel,
+          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
+        });
+      }
     }
     
     
