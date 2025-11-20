@@ -1168,12 +1168,12 @@ ngOnInit(): void {
     if (newLevel>this.lvl) {
       if(newLevel+this.lvl>=20){
         updateDoc(doc(this.firestore, `character/${this.characterId}`), {
-          lvl: newLevel,
-          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
+          lvl: 20,
+          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(20-this.lvl))
         });
       }else{
         updateDoc(doc(this.firestore, `character/${this.characterId}`), {
-          lvl: 20,
+          lvl: newLevel,
           hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
         });
       }
@@ -1182,12 +1182,12 @@ ngOnInit(): void {
       if(newLevel+this.lvl<1){
         updateDoc(doc(this.firestore, `character/${this.characterId}`), {
           lvl: 1,
-          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
+          hp: this.maxHp- ((this.baseHp+kitartasMod)*(this.lvl-1))
         });
       }else{
         updateDoc(doc(this.firestore, `character/${this.characterId}`), {
           lvl: newLevel,
-          hp: this.maxHp+ ((this.baseHp+kitartasMod)*(newLevel-this.lvl))
+          hp: this.maxHp- ((this.baseHp+kitartasMod)*(this.lvl-newLevel))
         });
       }
     }
