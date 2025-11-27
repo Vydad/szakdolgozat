@@ -1,5 +1,6 @@
 <nav class="navbar">
     <div>
+      <img id="logo" src="../assets/images/logo.png">
         <a routerLink="/home" routerLinkActive="active">Főoldal</a>
         <a routerLink="/characters" routerLinkActive="active" *ngIf="authService.isAuthenticated()">Karakterek</a>
         <a routerLink="/campaigns" routerLinkActive="active" *ngIf="authService.isAuthenticated()">Kampányok</a>
