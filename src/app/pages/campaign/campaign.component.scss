@@ -1,32 +1,58 @@
 .campaign-container {
-  margin-top: 100px;
+  margin-top: 50px;
   max-width: 900px;
   padding: 20px;
 
   color: black;
 }
-
+#bg{
+    min-height: 100vh;
+    background-image:url("/../assets/images/card_bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: "Merienda";
+  }
 .description {
   font-style: italic;
   margin-bottom: 25px;
   font-size: 1.2rem;
   opacity: .9;
 }
-
+span{
+  font-family: "Darker";
+}
+h3{
+  font-family: "Berk";
+}
+#copy{
+  background-color: green;
+  min-height: 20px;
+  min-width: 40px;
+  font-size: xx-small;
+  padding: 5px;
+  
+}
 .character-list {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
 }
 
 .character-card {
-  background-image: url("/assets/images/card_bg.jpg");
+  background-image: url("/assets/images/characterSelection.png");
+  background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
-  padding: 15px;
-  min-width: 300px;
-  border-radius: 8px;
+  background-position:center center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  height: 135px;
+  position: relative;
 }
 
 .popup-backdrop {
@@ -50,6 +76,13 @@
   width: 350px;
   text-align: center;
   color: #fff;
+  font-family: "Merienda";
+  h3{
+    font-family: "Merienda";
+  }
+  button{
+    font-family: "Merienda";
+  }
 }
 
 .btn-group {
@@ -63,6 +96,7 @@ button {
   border-radius: 6px;
   cursor: pointer;
   border: none;
+  font-family: "Merienda";
 }
 
 .cancel {

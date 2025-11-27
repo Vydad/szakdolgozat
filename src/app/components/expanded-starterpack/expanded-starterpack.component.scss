@@ -6,12 +6,18 @@
   min-width: 200px;
   margin: 30px auto;
 }
-
+button{
+  font-family: "Merienda";
+}
+input{
+  font-family: "Merienda";
+}
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  padding-left: 10px;
+  padding-right: 10px;
   h2 {
     font-size: 30px;
     color: #333;

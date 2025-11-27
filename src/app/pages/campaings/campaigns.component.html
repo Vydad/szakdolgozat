@@ -1,51 +1,53 @@
 <app-navbar></app-navbar>
-<div id="main">
-  <div class="top" id="new">
-    <h1>Kampányaim</h1>
-    <button (click)="openCreatePopup()">Új Kampány Létrehozása</button>
-  </div>
+<div id="bg">
+  <div id="main">
+    <div class="top" id="new">
+      <h1>Kampányaim</h1>
+      <button (click)="openCreatePopup()">Új Kampány Létrehozása</button>
+    </div>
 
-  <div id="bot" class="grid">
-    <div class="card" *ngFor="let camp of campaigns">
-      <h2>{{ camp.name }}</h2>
-      <div class="button-row">
-        <button *ngIf="camp.creatorId === userId"
-                class="delete-btn"
-                (click)="saveId(camp.id); showLeavePopup = true">
-          Törlés
-        </button>
+    <div id="bot" class="grid">
+      <div class="card" *ngFor="let camp of campaigns">
+        <h2>{{ camp.name }}</h2>
+        <div class="button-row">
+          <button *ngIf="camp.creatorId === userId"
+                  class="delete-btn"
+                  (click)="saveId(camp.id); showLeavePopup = true">
+            Törlés
+          </button>
 
-        <button (click)="openCampaign(camp.id)">
-          Megnyitás
-        </button>
+          <button (click)="openCampaign(camp.id)">
+            Megnyitás
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- POPUP OVERLAY -->
+    <div class="popup-overlay" *ngIf="showCreatePopup">
+      <div class="popup" (click)="$event.stopPropagation()">
+
+        <h2>Új Kampány</h2>
+
+        <input type="text" [(ngModel)]="newCampaignName" placeholder="Kampány neve">
+
+        <textarea [(ngModel)]="newCampaignDescription" placeholder="Leírás"></textarea>
+
+        <div class="buttons">
+          <button class="cancel-btn" (click)="closeCreatePopup()">Mégse</button>
+          <button class="create-btn" (click)="createCampaign()">Létrehozás</button>
+        </div>
+      </div>
+    </div>
+    <!-- Kilépési megerősítő popup -->
+  <div class="popup-backdrop" *ngIf="showLeavePopup">
+    <div class="popup2">
+      <h3>Biztosan ki akarod törölni a kampányt?</h3>
+
+      <div class="btn-group">
+        <button class="cancel" (click)="showLeavePopup = false">Mégse</button>
+        <button class="confirm" (click)="deleteCampaign()">Törlés</button>
       </div>
     </div>
   </div>
-  <!-- POPUP OVERLAY -->
-  <div class="popup-overlay" *ngIf="showCreatePopup">
-    <div class="popup" (click)="$event.stopPropagation()">
-
-      <h2>Új Kampány</h2>
-
-      <input type="text" [(ngModel)]="newCampaignName" placeholder="Kampány neve">
-
-      <textarea [(ngModel)]="newCampaignDescription" placeholder="Leírás"></textarea>
-
-      <div class="buttons">
-        <button class="cancel-btn" (click)="closeCreatePopup()">Mégse</button>
-        <button class="create-btn" (click)="createCampaign()">Létrehozás</button>
-      </div>
-    </div>
   </div>
-  <!-- Kilépési megerősítő popup -->
-<div class="popup-backdrop" *ngIf="showLeavePopup">
-  <div class="popup2">
-    <h3>Biztosan ki akarod törölni a kampányt?</h3>
-
-    <div class="btn-group">
-      <button class="cancel" (click)="showLeavePopup = false">Mégse</button>
-      <button class="confirm" (click)="deleteCampaign()">Törlés</button>
-    </div>
-  </div>
-</div>
 </div>

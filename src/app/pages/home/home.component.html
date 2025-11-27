@@ -1,38 +1,40 @@
 <app-navbar></app-navbar>
-<div id="main">
-    <h1>Üdvözöllek az Omni Portál weboldalán!</h1>
-    <div id="default">
-        <p>
-          Ez a weboldal a Dungeons and Dragons asztali szerepjáték alapján jött létre, néhol kissé újragondolva. A célja, hogy végre legyen egy felhasználóbarát platform a magyar játékosok számára, ami nagy hangsúlyt fektet a homebrew tartalmak létrehozására is, ezért az eredeti tartalmak mellett fellelhetők mind saját, mind az internetről származó kreatív ötletek, mint a különféle új háttértörténetek, fegyverek, varázslatok stb. A továbbiakban számos új fejlesztés várható.
-        </p>
-        <p>
-          Jó szórakozást!
-        </p>
-    </div>
-    <div class="card-container">
-        <div class="card" >
-          <h3>Világ leírás</h3>
-          <button (click)="expandCard('vilag', $event); $event.stopPropagation()">Bővebben</button>
-        </div>
-      
-        <div class="card" (click)="expandCard('tortenetek', $event)">
-          <h3>Történetek</h3>
-          <button (click)="expandCard('tortenetek', $event); $event.stopPropagation()">Bővebben</button>
-        </div>
-      
-        <div class="card" (click)="expandCard('magia', $event)">
-          <h3>Mágia</h3>
-          <button (click)="expandCard('magia', $event); $event.stopPropagation()">Bővebben</button>
-        </div>
+<div id="bg">
+  <div id="main">
+      <h1>Üdvözöllek az Omni Portál weboldalán!</h1>
+      <div id="default">
+          <p>
+            Ez a weboldal a Dungeons and Dragons asztali szerepjáték alapján jött létre, néhol kissé újragondolva. A célja, hogy végre legyen egy felhasználóbarát platform a magyar játékosok számára, ami nagy hangsúlyt fektet a homebrew tartalmak létrehozására is, ezért az eredeti tartalmak mellett fellelhetők mind saját, mind az internetről származó kreatív ötletek, mint a különféle új háttértörténetek, fegyverek, varázslatok stb. A továbbiakban számos új fejlesztés várható.
+          </p>
+          <h4>
+            Jó szórakozást!
+          </h4>
       </div>
-      
-      <!-- Overlay az expanded cardhoz -->
-      <div *ngIf="expandedCard" class="expanded-overlay">
-        <div class="expanded-card">
-            <app-expanded-card></app-expanded-card>
-          <h2>{{ expandedCard | titlecase }}</h2>
-          <p>Részletes leírás ehhez a kategóriához...</p>
-          <button (click)="closeCard($event)">Bezárás</button>
+      <div class="card-container">
+          <div class="card" >
+            <h3>Világleírás</h3>
+            <button (click)="expandCard('vilag', $event); $event.stopPropagation()">Bővebben</button>
+          </div>
+        
+          <div class="card" (click)="expandCard('tortenetek', $event)">
+            <h3>Történetek</h3>
+            <button (click)="expandCard('tortenetek', $event); $event.stopPropagation()">Bővebben</button>
+          </div>
+        
+          <div class="card" (click)="expandCard('magia', $event)">
+            <h3>Mágia</h3>
+            <button (click)="expandCard('magia', $event); $event.stopPropagation()">Bővebben</button>
+          </div>
         </div>
-      </div>
+        
+        <!-- Overlay az expanded cardhoz -->
+        <div *ngIf="expandedCard" class="expanded-overlay">
+          <div class="expanded-card">
+              <app-expanded-card></app-expanded-card>
+            <h2>{{ expandedCard | titlecase }}</h2>
+            <p>Részletes leírás ehhez a kategóriához...</p>
+            <button (click)="closeCard($event)">Bezárás</button>
+          </div>
+        </div>
+  </div>
 </div>

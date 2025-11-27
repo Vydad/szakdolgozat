@@ -21,6 +21,7 @@ export class CampaignComponent implements OnInit {
   id:string|null='';
   isOwner: boolean = false;
   showLeavePopup = false;
+  copied = false;
 
     constructor(
     private route: ActivatedRoute,
@@ -99,4 +100,13 @@ export class CampaignComponent implements OnInit {
 
     this.router.navigate(['/campaigns']);
   }
+  copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(() => {
+    this.copied = true;
+
+    setTimeout(() => {
+      this.copied = false;
+    }, 1500);
+  });
+}
 }

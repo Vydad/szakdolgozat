@@ -1,36 +1,38 @@
 <app-navbar></app-navbar>
-<div id="main">
-  <div id="new" class="top">
-    <h1>Karaktereim</h1>
-    <button (click)="openCharacterCreate()">Új Karakter Létrehozása</button>
-  </div>
+<div id="bg">
+  <div id="main">
+    <div id="new" class="top">
+      <h1>Karaktereim</h1>
+      <button (click)="openCharacterCreate()">Új Karakter Létrehozása</button>
+    </div>
 
-  <div id="bot" class="grid">
-    <div class="card" *ngFor="let char of characters">
-        <button *ngIf="!campaignId" (click)="openCharacter(char.id)">
-          Megnyitás
-        </button>
-        <button *ngIf="campaignId && !char.campaign" (click)="joinCampaign(char.id)">
-          Csatlakozás
-        </button>
-        <button class="delete-btn"
-                (click)="saveId(char.id); showLeavePopup = true">
-          Törlés
-        </button>
-        <h2>{{ char.name || 'Névtelen' }}</h2>
-        <p><strong>Kaszt:</strong> {{ char.class }}</p>
-        <p><strong>Faj:</strong> {{ char.race }}</p>
+    <div id="bot" class="grid">
+      <div class="card" *ngFor="let char of characters">
+          <button *ngIf="!campaignId" (click)="openCharacter(char.id)">
+            Megnyitás
+          </button>
+          <button *ngIf="campaignId && !char.campaign" (click)="joinCampaign(char.id)">
+            Csatlakozás
+          </button>
+          <button class="delete-btn"
+                  (click)="saveId(char.id); showLeavePopup = true">
+            Törlés
+          </button>
+          <h2>{{ char.name || 'Névtelen' }}</h2>
+          <p><strong>Kaszt:</strong> {{ char.class }}</p>
+          <p><strong>Faj:</strong> {{ char.race }}</p>
+      </div>
+    </div>
+      <!-- Kilépési megerősítő popup -->
+  <div class="popup-backdrop" *ngIf="showLeavePopup">
+    <div class="popup2">
+      <h3>Biztosan ki akarod törölni a karaktert?</h3>
+
+      <div class="btn-group">
+        <button class="cancel" (click)="showLeavePopup = false">Mégse</button>
+        <button class="confirm" (click)="deleteCharacter()">Törlés</button>
+      </div>
     </div>
   </div>
-    <!-- Kilépési megerősítő popup -->
-<div class="popup-backdrop" *ngIf="showLeavePopup">
-  <div class="popup2">
-    <h3>Biztosan ki akarod törölni a karaktert?</h3>
-
-    <div class="btn-group">
-      <button class="cancel" (click)="showLeavePopup = false">Mégse</button>
-      <button class="confirm" (click)="deleteCharacter()">Törlés</button>
-    </div>
   </div>
-</div>
 </div>

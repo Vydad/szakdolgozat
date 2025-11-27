@@ -12,7 +12,7 @@
     max-width: 320px; /* Ne legyen túl széles */
     height: 200px;
     background: #7c0f0f;
-    color: white;
+    color: wheat;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,6 +38,7 @@
       transform: translateX(-50%);
       display: flex;
       justify-content: center;
+      font-family: "Merienda";
     }
   }
   
@@ -71,7 +72,17 @@
   }
 
   #main{
-    margin-top: 65px;
+    margin-top: 7%;
+    font-family: "Merienda";
+  }
+  #bg{
+    min-height: 100vh;
+    background-image:url("/../assets/images/card_bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
   }
 
   h1{
@@ -79,7 +90,7 @@
   }
   
   #default{
-    width: 80%;
+    width: 60%;
     text-align: center;
     font-size: large;
     margin: auto;
@@ -100,6 +111,7 @@
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
+    font-family: "Merienda";
   }
   
   @keyframes fadeIn {
