@@ -10,7 +10,12 @@
 
   <!-- A fő tartalom -->
   <div class="content">
-    <h2>{{ selectedNav?.title }}</h2>
-    <p>{{ selectedNav?.description }}</p>
+    <div id="text">
+      <h2>{{ selectedNav?.title }}</h2>
+      <h4>{{selectedNav?.little_title}}</h4>
+      <ng-container *ngFor="let item of selectedNav?.description">
+        <p>{{ item}}</p>
+      </ng-container>
+    </div>
   </div>
 </div>

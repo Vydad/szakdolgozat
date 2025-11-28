@@ -14,7 +14,6 @@
   .sidebar {
     width: 15%;
     background: #3a0303;
-    color: white;
     text-align: left;
     margin: 0;
     padding: 0;
@@ -32,6 +31,9 @@
         width: 100%;
         top: 0;
         left: 0;
+        button{
+          color:wheat;
+        }
       }
     
   }
@@ -40,6 +42,45 @@
   .content {
     width: 90%;
     padding: 20px;
+    
+  }
+  #text{
+    color:#c9a93c;
+    padding: 20px 20%;
+    max-height: 70vh;      /* a képernyő 70%-áig nőhet */
+    overflow-y: auto;     /* FÜGGŐLEGES GÖRGETÉS */
+    border-radius: 10px;
+    /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #f7ef8a #3a0303;
+
+  /* Chrome, Edge, Safari */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #3a0303;      /* sáv háttere */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      #f7ef8a,
+      #c9a93c
+    );
+    border-radius: 10px;
+    border: 2px solid #3a0303;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      #fff3a0,
+      #e0c45c
+    );
+  }
   }
 
   /* Akció gombok stílus */
