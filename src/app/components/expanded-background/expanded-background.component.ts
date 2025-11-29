@@ -33,7 +33,8 @@ export class ExpandedBackgroundComponent implements OnInit {
   defaultTools: { [bgId: string]: (string | null)[] } = {};
   selectedSkills: { [bgId: string]: (string | null)[] } = {};
   defaultSkills: { [bgId: string]: (string | null)[] } = {};
-  language: (string | null)[] = [];
+  selectedLanguages: { [bgId: string]: (string | null)[] } = {};
+  defaultLanguages: { [bgId: string]: (string | null)[] } = {};
   bgEquipment: Equipment[] = [];
   expanded: boolean = false; // Az alapértelmezett állapot, hogy a kártya össze van csukva
   expandedBgId: string | null = null; // A kiválasztott kaszt azonosítója, hogy azt bővítsük
@@ -132,6 +133,33 @@ export class ExpandedBackgroundComponent implements OnInit {
     const alreadySelected = this.selectedSkills[bgId].filter((v, i) => v !== null && i !== index);
     return allOptions.filter(opt => !alreadySelected.includes(opt));
   }
+// ====== Nylevek ======
+  initLanguageSelection(card: any) {
+    if (!this.selectedLanguages[card.id]) {
+      const count = card.languages[0];
+      this.selectedLanguages[card.id] = Array(count).fill(null);
+    }
+    return true;
+  }
+  onSelectLanguage(bgId: string, index: number, value: string) {
+    this.selectedLanguages[bgId][index] = value;
+  }
+  defaultLanguage(bgId: string, value: unknown) {
+  if (typeof value !== 'string') return;
+  if (!this.defaultLanguages[bgId]) {
+    this.defaultLanguages[bgId] = [];
+  }
+  if (!this.defaultLanguages[bgId].includes(value)) {
+    this.defaultLanguages[bgId].push(value);
+    this.selectedLanguages=this.defaultLanguages;
+  }
+}
+  getLanguageOptions(card: any, bgId: string, index: number): string[] {
+    const allOptions = card.languages.slice(1) as string[];
+    const alreadySelected = this.selectedLanguages[bgId].filter((v, i) => v !== null && i !== index);
+    return allOptions.filter(opt => !alreadySelected.includes(opt));
+  }
+
   setBgEquipment(ep: Equipment[]): void {
       this.bgEquipment = ep.map(e => ({ db: e.db, name: e.name }));
   }
@@ -141,11 +169,8 @@ export class ExpandedBackgroundComponent implements OnInit {
   loadTools(){
     return this.selectedTools;
   }
-  setLanguage(language:(string | null)[]){
-    this.language=language;
-  }
   loadLanguage(){
-    return this.language;
+    return this.selectedLanguages;
   }
   kivalaszt(id:string){
     this.bgId=id;

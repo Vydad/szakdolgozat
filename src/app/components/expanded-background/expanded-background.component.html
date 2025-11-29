@@ -29,7 +29,6 @@
               <br>
             <p><strong>Leírás:</strong><br> {{ card.description }}</p>
             <h3>Tulajdonságok:</h3>
-            <p><strong>Nyelvek:</strong><br> {{ card.language }}</p>
             <p><strong>Eszközjártasság:</strong><br>
               <ng-container *ngIf="card.tools?.length === 0">
                 <em>Nincs eszközjártasság</em>
@@ -90,7 +89,26 @@
                 <em>Nincs nyelv</em>
               </ng-container>
               <ng-container *ngIf="card.languages?.length > 0">
-                {{ card.language }}{{setLanguage(card.languages)}}
+                <ng-container *ngIf="card.languages[0]==0; else selectlang">
+                  <div *ngFor="let lang of card.languages | slice:1">
+                    - {{ lang }}
+                    {{ defaultLanguage(card.id, lang) }}
+                  </div>
+                </ng-container>
+                <ng-template #selectlang>
+                  <div *ngIf="initLanguageSelection(card)">
+                    <div *ngFor="let _ of selectedLanguages[card.id]; let i = index">
+                      <select
+                        [ngModel]="selectedLanguages[card.id][i]"
+                        (ngModelChange)="onSelectLanguage(card.id, i, $event)">
+                        <option [ngValue]="null" disabled>-- Válassz egyet --</option>
+                        <option *ngFor="let option of getLanguageOptions(card, card.id, i)" [ngValue]="option">
+                          {{ option }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-template>
               </ng-container>
             </p>
             <h3>Felszerelés</h3>
