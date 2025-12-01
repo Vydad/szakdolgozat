@@ -689,47 +689,48 @@
                 <div class="spell-section" *ngFor="let level of [0,1,2,3,4,5,6,7,8,9]">
                   <!-- Csak ha van olyan spell ezen a szinten -->
                   <div *ngIf="(allSpells | spellFilter: spellSearch : className) | hasSpellLevel: level">
-                    <h3>{{ level === 0 ? "Varázsfortély" : level + ". szint" }}</h3>
+                    <ng-container *ngIf="getVarazstoltesTrait().charge[level] !=undefined">
+                      <h3>{{ level === 0 ? "Varázsfortély" : level + ". szint" }}</h3>
+                      <table class="spell-table">
+                        <ng-container *ngFor="let spell of (allSpells | spellFilter: spellSearch : className)">
+                          <tr *ngIf="spell.lvl === level">
+                            <td>{{ spell.name }}</td>
+                            <td class="action-buttons">
+                              <button  
+                                class="prepare-btn"
+                                [class.remove]="isSpellPrepared(spell)"
+                                (click)="prepareSpell(spell)"
+                                [disabled]="isSpellPrepared(spell) ? false : hasReachedLimit(level)"
+                              >
+                                {{ isSpellPrepared(spell) ? 'Töröl' : 'Bekészít' }}
+                              </button>
+                            </td>
+                            <td>
+                              <button (click)="toggleSpellDetails(spell, level)" class="details-btn">
+                                {{ openedSpellId[level] === spell.name ? 'Bezár' : 'Bővebben' }}
+                              </button>
+                            </td>
+                          </tr>
 
-                    <table class="spell-table">
-                      <ng-container *ngFor="let spell of (allSpells | spellFilter: spellSearch : className)">
-                        <tr *ngIf="spell.lvl === level">
-                          <td>{{ spell.name }}</td>
-                          <td class="action-buttons">
-                            <button  
-                              class="prepare-btn"
-                              [class.remove]="isSpellPrepared(spell)"
-                              (click)="prepareSpell(spell)"
-                              [disabled]="isSpellPrepared(spell) ? false : hasReachedLimit(level)"
-                            >
-                              {{ isSpellPrepared(spell) ? 'Töröl' : 'Bekészít' }}
-                            </button>
-                          </td>
-                          <td>
-                            <button (click)="toggleSpellDetails(spell, level)" class="details-btn">
-                              {{ openedSpellId[level] === spell.name ? 'Bezár' : 'Bővebben' }}
-                            </button>
-                          </td>
-                        </tr>
-
-                        <!-- részletek -->
-                        <tr *ngIf="openedSpellId[level] === spell.name">
-                          <td colspan="3" class="spell-details">
-                            <div class="spell-info-box">
-                              <table class="spell-details-table">
-                                <tr><td><strong>Iskola:</strong></td><td>{{ spell.school }}</td></tr>
-                                <tr><td><strong>Idő:</strong></td><td>{{ spell.casting_time }}</td></tr>
-                                <tr><td><strong>Hatótáv:</strong></td><td>{{ spell.range }}</td></tr>
-                                <tr><td><strong>Komponensek:</strong></td><td>{{ spell.component }}</td></tr>
-                                <tr><td><strong>Időtartam:</strong></td><td>{{ spell.time }}</td></tr>
-                              </table>
-                              <br>
-                              <p>{{ spell.description }}</p>
-                            </div>
-                          </td>
-                        </tr>
-                      </ng-container>
-                    </table>
+                          <!-- részletek -->
+                          <tr *ngIf="openedSpellId[level] === spell.name">
+                            <td colspan="3" class="spell-details">
+                              <div class="spell-info-box">
+                                <table class="spell-details-table">
+                                  <tr><td><strong>Iskola:</strong></td><td>{{ spell.school }}</td></tr>
+                                  <tr><td><strong>Idő:</strong></td><td>{{ spell.casting_time }}</td></tr>
+                                  <tr><td><strong>Hatótáv:</strong></td><td>{{ spell.range }}</td></tr>
+                                  <tr><td><strong>Komponensek:</strong></td><td>{{ spell.component }}</td></tr>
+                                  <tr><td><strong>Időtartam:</strong></td><td>{{ spell.time }}</td></tr>
+                                </table>
+                                <br>
+                                <p>{{ spell.description }}</p>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </table>
+                    </ng-container>
                   </div>
                 </div>
               </div>

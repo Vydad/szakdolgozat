@@ -444,7 +444,7 @@ ngOnInit(): void {
     const dexMod = dex ? dex.modifier : 0;
 
     // Megkeressük a legmagasabb AC-értékű páncélt
-    const armorItems = this.equippedArmors.filter((a: any) => a.type?.includes('páncél'));
+    const armorItems = this.equippedArmors.filter((a: any) => a.type?.includes('páncél')&& !a.type?.includes('pajzs'));
     const bestArmor = armorItems.length > 0 
       ? Math.max(...armorItems.map((a: any) => Number(a.armor) || 0)) 
       : 10; // nincs páncél → alap 10
