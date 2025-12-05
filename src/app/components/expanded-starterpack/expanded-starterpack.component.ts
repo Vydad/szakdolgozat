@@ -66,7 +66,7 @@ export class ExpandedStarterpackComponent {
         { value: 'Láncing', description: 'Egymásba kapaszkodó fémgyűrűkből áll, általában az öltözet rétegei közt viselik, így a bőr képes tompítani a láncok súrlódásának zaját. Mérsékelt védelmet nyújt a felsőtest számára.' },
         { value: 'Gyűrűs páncél', description: 'Egy erősebb bőrpáncél, amelybe nehéz fémgyűrűket szőttek, hogy megerősítsék azt az erőteljesebb csapásokkal szemben. Mivel a gyűrűs páncél alulmarad a láncinggel szemben, ezért általában azok viselik, akik az utóbbit nem tudják megfizetni. Viselésével a lopakodásra hátrányt kapsz.' }
       ],
-      selected: 'Vászon ing'
+      selected: 'Bőrpáncél'
     }
   ];
   baseEquipment: BaseEquipment[] = [
