@@ -39,12 +39,11 @@ export class ExpandedStarterpackComponent {
       id: 1,
       name: ' Elsődleges Fegyver',
       options: [
-        { value: 'Hosszúkard', description: 'Egy éles penge a közelharcra.' },
-        { value: 'Rövidkard', description: 'Egy éles penge a közelharcra.' },
-        { value: 'Csatabárd', description: 'Zúzófegyver a nehézpáncélos ellenfelekhez.' },
-        { value: 'Hosszúíj', description: 'Távolsági fegyver, nyilakkal.' },
-        { value: 'Lándzsa', description: 'Távolsági fegyver, nyilakkal.' },
-        { value: 'bot', description: 'Távolsági fegyver, nyilakkal.'}
+        { value: 'Hosszúkard', description: 'Egy kétkezes használatra készült kard, amely a harcosok alapvető és nagyra becsült fegyvere. Pengéje egyenes és kétélű, markolata keresztalakú. A teljes hossza általában 80 és 110 centiméter között mozog.' },
+        { value: 'Csatabárd', description: 'Egy dupla fejű harcra kialakított fejsze, hosszú nyéllel. Ha az egyik fej éle csatában kicsorbul a harcos egy fogásváltással szert tehet egy új élre a túloldalon. ' },
+        { value: 'Hosszúíj', description: 'Embermagas, nehéz íj amely használatához komoly képzetség szükséges. Azonban nincs az a páncél amely ellent tud állni vesszőinek.' },
+        { value: 'Lándzsa', description: 'Sokoldalú, 2-2,5 méteres bot, tetején egy mindkét oldalt élezett hegyes fémpengével.' },
+        { value: 'Sétabot', description: 'Egy egyszerű sétebot, egyik végén vassal megerősítve.'}
       ],
       selected: 'Hosszúkard'
     },
@@ -52,10 +51,10 @@ export class ExpandedStarterpackComponent {
       id: 2,
       name: ' Másodlagos Fegyver',
       options: [
-        { value: 'Rövidkard', description: 'Egy éles penge a közelharcra.' },
-        { value: 'Tőr', description: 'Zúzófegyver a nehézpáncélos ellenfelekhez.' },
-        { value: 'RövidÍj', description: 'Távolsági fegyver, nyilakkal.' },
-        { value: 'dobó balta', description: 'Távolsági fegyver, nyilakkal.'}
+        { value: 'Rövidkard', description: 'Egy kézben forgatott, mindkét oldalán élezett a hosszú kardnál jóval rövidebb szúró-vágó fegyver' },
+        { value: 'Tőr', description: 'Egy olyan kétélű kés, amelynek hegye rendkívül éles. A használatában való jártasság által hozzáadhatod a vele mért támadások találati dobásához a jártasság bónuszodat.' },
+        { value: 'Rövidíj', description: 'Vadászok által használt kisebb állatok rövidtávú vadászatához használt fegyver.' },
+        { value: 'Kézi fejsze', description: 'Egy fanyelű fejsze, amelynek feje általában vasből vagy acélból készül. A használatában való jártasság által hozzáadhatod a vele mért támadások találati dobásához a jártasság bónuszodat.'}
       ],
       selected: 'Rövidkard'
     },
@@ -63,9 +62,9 @@ export class ExpandedStarterpackComponent {
       id: 3,
       name: 'Páncél',
       options: [
-        { value: 'Vászon ing', description: 'Egyszerű, de kényelmes ruházat.' },
-        { value: 'Bőrpáncél', description: 'Könnyű és rugalmas védelem.' },
-        { value: 'Láncing', description: 'Közepes védelem, de nehezebb.' }
+        { value: 'Bőrpáncél', description: 'A mell- és vállvért bőrből készültek, amelyet forrázással tettek strapabíróvá. A páncélzat többi része puhább, rugalmasabb anyagokból készűlt.' },
+        { value: 'Láncing', description: 'Egymásba kapaszkodó fémgyűrűkből áll, általában az öltözet rétegei közt viselik, így a bőr képes tompítani a láncok súrlódásának zaját. Mérsékelt védelmet nyújt a felsőtest számára.' },
+        { value: 'Gyűrűs páncél', description: 'Egy erősebb bőrpáncél, amelybe nehéz fémgyűrűket szőttek, hogy megerősítsék azt az erőteljesebb csapásokkal szemben. Mivel a gyűrűs páncél alulmarad a láncinggel szemben, ezért általában azok viselik, akik az utóbbit nem tudják megfizetni. Viselésével a lopakodásra hátrányt kapsz.' }
       ],
       selected: 'Vászon ing'
     }
